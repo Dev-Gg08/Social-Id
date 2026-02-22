@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SchoolVerse — Your School Community</title>
+    <meta name="description" content="SchoolVerse - แชท แชร์การบ้าน โพสต์ วิดีโอ และส่งโน้ตถึงคนที่ชอบ ในโรงเรียนของเรา">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-gradient"></div>
+    <div class="bg-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <!-- Auth Modal -->
+    <div id="authModal" class="modal-overlay">
+        <div class="modal-card auth-card">
+            <div class="auth-logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 48 48" fill="none">
+                        <circle cx="24" cy="24" r="22" stroke="url(#grad1)" stroke-width="3"/>
+                        <path d="M16 28c0-4.418 3.582-8 8-8s8 3.582 8 8" stroke="url(#grad2)" stroke-width="2.5" stroke-linecap="round"/>
+                        <circle cx="24" cy="16" r="5" fill="url(#grad2)"/>
+                        <defs>
+                            <linearGradient id="grad1" x1="0" y1="0" x2="48" y2="48">
+                                <stop stop-color="#00f5ff"/>
+                                <stop offset="1" stop-color="#7b2dff"/>
+                            </linearGradient>
+                            <linearGradient id="grad2" x1="0" y1="0" x2="48" y2="48">
+                                <stop stop-color="#ff00e5"/>
+                                <stop offset="1" stop-color="#00f5ff"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <h1 class="auth-title">SchoolVerse</h1>
+                <p class="auth-subtitle">เข้าร่วมคอมมูนิตี้โรงเรียนของเรา ✨</p>
+            </div>
+            <form id="authForm" class="auth-form">
+                <div class="input-group">
+                    <label for="authUsername">ชื่อผู้ใช้</label>
+                    <input type="text" id="authUsername" placeholder="ใส่ชื่อที่อยากใช้..." required minlength="2" maxlength="20">
+                </div>
+                <div class="input-group">
+                    <label for="authDisplayName">ชื่อที่แสดง</label>
+                    <input type="text" id="authDisplayName" placeholder="ชื่อเล่นที่เพื่อนๆ จะเห็น..." required minlength="1" maxlength="30">
+                </div>
+                <div class="input-group">
+                    <label for="authSchool">โรงเรียน</label>
+                    <input type="text" id="authSchool" placeholder="ชื่อโรงเรียนของคุณ..." maxlength="50">
+                </div>
+                <button type="submit" class="btn btn-primary btn-glow">
+                    <span>เข้าสู่ SchoolVerse</span>
+                    <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+                        <path d="M5 12h14m-7-7 7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="app" class="app hidden">
+        <!-- Top Bar -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <div class="app-logo-small">
+                    <svg viewBox="0 0 32 32" fill="none" width="28" height="28">
+                        <circle cx="16" cy="16" r="14" stroke="url(#topGrad)" stroke-width="2"/>
+                        <path d="M11 20c0-2.761 2.239-5 5-5s5 2.239 5 5" stroke="url(#topGrad2)" stroke-width="1.5" stroke-linecap="round"/>
+                        <circle cx="16" cy="12" r="3" fill="url(#topGrad2)"/>
+                        <defs>
+                            <linearGradient id="topGrad" x1="0" y1="0" x2="32" y2="32">
+                                <stop stop-color="#00f5ff"/><stop offset="1" stop-color="#7b2dff"/>
+                            </linearGradient>
+                            <linearGradient id="topGrad2" x1="0" y1="0" x2="32" y2="32">
+                                <stop stop-color="#ff00e5"/><stop offset="1" stop-color="#00f5ff"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <span class="topbar-title">SchoolVerse</span>
+            </div>
+            <div class="topbar-right">
+                <button class="topbar-btn" id="btnNotifications" title="แจ้งเตือน">
+                    <svg viewBox="0 0 24 24" fill="none" width="22" height="22">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span class="notif-badge" id="notifBadge">0</span>
+                </button>
+                <button class="topbar-btn avatar-btn" id="btnProfile" title="โปรไฟล์">
+                    <div class="avatar avatar-sm" id="topbarAvatar">
+                        <span>U</span>
+                    </div>
+                </button>
+            </div>
+        </header>
+
+        <!-- Tab Content -->
+        <main class="tab-content" id="tabContent">
+            <!-- Feed Tab -->
+            <section class="tab-pane active" id="feedTab">
+                <div class="tab-header">
+                    <h2>📝 ฟีด</h2>
+                    <div class="tab-header-actions">
+                        <button class="chip chip-active" data-filter="all">ทั้งหมด</button>
+                        <button class="chip" data-filter="homework">📚 การบ้าน</button>
+                        <button class="chip" data-filter="general">💬 ทั่วไป</button>
+                    </div>
+                </div>
+                <!-- Create Post -->
+                <div class="card create-post-card">
+                    <div class="create-post-header">
+                        <div class="avatar avatar-sm" id="feedAvatar"><span>U</span></div>
+                        <input type="text" class="create-post-input" id="createPostInput" placeholder="คุณกำลังคิดอะไรอยู่? 💭">
+                    </div>
+                    <div class="create-post-expanded hidden" id="createPostExpanded">
+                        <textarea id="postContent" class="post-textarea" placeholder="เขียนอะไรก็ได้ที่อยากแชร์..." rows="3"></textarea>
+                        <div class="create-post-options">
+                            <label class="option-btn">
+                                <input type="file" accept="image/*" id="postImage" hidden>
+                                <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                                    <circle cx="8.5" cy="8.5" r="1.5" fill="currentColor"/>
+                                    <path d="m21 15-5-5L5 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                <span>รูปภาพ</span>
+                            </label>
+                            <select id="postType" class="post-type-select">
+                                <option value="general">💬 ทั่วไป</option>
+                                <option value="homework">📚 การบ้าน</option>
+                            </select>
+                        </div>
+                        <div id="imagePreview" class="image-preview hidden"></div>
+                        <button class="btn btn-primary btn-sm" id="btnSubmitPost">โพสต์ 🚀</button>
+                    </div>
+                </div>
+                <!-- Posts Feed -->
+                <div class="posts-feed" id="postsFeed">
+                    <!-- Posts will be injected here -->
+                </div>
+            </section>
+
+            <!-- Chat Tab -->
+            <section class="tab-pane" id="chatTab">
+                <div class="chat-layout">
+                    <!-- Channel Sidebar -->
+                    <div class="chat-sidebar" id="chatSidebar">
+                        <div class="sidebar-header">
+                            <h3>💬 ห้องแชท</h3>
+                            <button class="btn-icon" id="btnCreateRoom" title="สร้างห้อง">
+                                <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+                                    <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                    <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="channel-list" id="channelList">
+                            <!-- Channels injected here -->
+                        </div>
+                    </div>
+                    <!-- Chat Main -->
+                    <div class="chat-main">
+                        <div class="chat-header" id="chatHeader">
+                            <button class="btn-icon chat-back-btn" id="btnChatBack">
+                                <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+                                    <path d="M19 12H5m7-7-7 7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                            <div class="chat-header-info">
+                                <h3 id="chatRoomName">เลือกห้องแชท</h3>
+                                <span class="chat-members" id="chatMembers"></span>
+                            </div>
+                        </div>
+                        <div class="messages-container" id="messagesContainer">
+                            <div class="chat-empty-state">
+                                <div class="empty-icon">💬</div>
+                                <p>เลือกห้องแชทเพื่อเริ่มคุยกัน!</p>
+                            </div>
+                        </div>
+                        <div class="chat-input-area hidden" id="chatInputArea">
+                            <input type="text" id="messageInput" class="message-input" placeholder="พิมพ์ข้อความ...">
+                            <button class="btn-send" id="btnSendMessage">
+                                <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+                                    <path d="m22 2-7 20-4-9-9-4 20-7Z" fill="currentColor"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Social Tab -->
+            <section class="tab-pane" id="socialTab">
+                <div class="tab-header">
+                    <h2>👥 คอมมูนิตี้</h2>
+                </div>
+                <!-- Profile Card -->
+                <div class="card profile-hero-card" id="profileHeroCard">
+                    <div class="profile-hero">
+                        <div class="profile-avatar-large" id="profileAvatarLarge">
+                            <span>U</span>
+                        </div>
+                        <div class="profile-info">
+                            <h3 id="profileDisplayName">User</h3>
+                            <p class="profile-username" id="profileUsername">@user</p>
+                            <p class="profile-school" id="profileSchool">โรงเรียน</p>
+                        </div>
+                        <button class="btn btn-outline btn-sm" id="btnEditProfile">แก้ไขโปรไฟล์</button>
+                    </div>
+                    <div class="profile-stats">
+                        <div class="stat"><span class="stat-num" id="statPosts">0</span><span class="stat-label">โพสต์</span></div>
+                        <div class="stat"><span class="stat-num" id="statNotes">0</span><span class="stat-label">โน้ต</span></div>
+                        <div class="stat"><span class="stat-num" id="statFriends">0</span><span class="stat-label">เพื่อน</span></div>
+                    </div>
+                </div>
+
+                <!-- Love Notes Section -->
+                <div class="section-header">
+                    <h3>💌 โน้ตฝากคนที่ชอบ</h3>
+                    <button class="btn btn-accent btn-sm" id="btnWriteNote">เขียนโน้ต ✨</button>
+                </div>
+                <div class="love-notes-grid" id="loveNotesGrid">
+                    <!-- Notes injected here -->
+                </div>
+
+                <!-- Community Members -->
+                <div class="section-header">
+                    <h3>🌟 สมาชิกคอมมูนิตี้</h3>
+                </div>
+                <div class="members-grid" id="membersGrid">
+                    <!-- Members injected here -->
+                </div>
+            </section>
+
+            <!-- Videos Tab -->
+            <section class="tab-pane" id="videosTab">
+                <div class="tab-header">
+                    <h2>🎬 วิดีโอ</h2>
+                    <button class="btn btn-primary btn-sm" id="btnUploadVideo">
+                        <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <polyline points="17,8 12,3 7,8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <line x1="12" y1="3" x2="12" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        อัปโหลด
+                    </button>
+                </div>
+                <div class="video-feed" id="videoFeed">
+                    <!-- Videos injected here -->
+                </div>
+            </section>
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <button class="nav-item active" data-tab="feedTab" id="navFeed">
+                <svg viewBox="0 0 24 24" fill="none" width="24" height="24">
+                    <path d="M4 11V4h7v7H4Zm0 9v-7h7v7H4Zm9 0v-7h7v7h-7Zm0-9V4h7v7h-7Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>ฟีด</span>
+            </button>
+            <button class="nav-item" data-tab="chatTab" id="navChat">
+                <svg viewBox="0 0 24 24" fill="none" width="24" height="24">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>แชท</span>
+            </button>
+            <button class="nav-item" data-tab="socialTab" id="navSocial">
+                <svg viewBox="0 0 24 24" fill="none" width="24" height="24">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="1.5"/>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>โซเชียล</span>
+            </button>
+            <button class="nav-item" data-tab="videosTab" id="navVideos">
+                <svg viewBox="0 0 24 24" fill="none" width="24" height="24">
+                    <polygon points="5,3 19,12 5,21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>วิดีโอ</span>
+            </button>
+        </nav>
+    </div>
+
+    <!-- Modals -->
+    <!-- Create Chat Room Modal -->
+    <div id="createRoomModal" class="modal-overlay hidden">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>สร้างห้องแชทใหม่ 💬</h3>
+                <button class="btn-icon modal-close" data-close="createRoomModal">&times;</button>
+            </div>
+            <form id="createRoomForm">
+                <div class="input-group">
+                    <label>ชื่อห้อง</label>
+                    <input type="text" id="roomName" placeholder="เช่น ห้อง ม.6/1" required>
+                </div>
+                <div class="input-group">
+                    <label>คำอธิบาย</label>
+                    <input type="text" id="roomDesc" placeholder="อธิบายห้องนี้สั้นๆ...">
+                </div>
+                <button type="submit" class="btn btn-primary">สร้างห้อง ✨</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Love Note Modal -->
+    <div id="loveNoteModal" class="modal-overlay hidden">
+        <div class="modal-card love-note-modal">
+            <div class="modal-header">
+                <h3>💌 เขียนโน้ตฝากคนที่ชอบ</h3>
+                <button class="btn-icon modal-close" data-close="loveNoteModal">&times;</button>
+            </div>
+            <form id="loveNoteForm">
+                <div class="input-group">
+                    <label>ถึงใคร?</label>
+                    <input type="text" id="noteTo" placeholder="ชื่อคนที่อยากส่งถึง..." required>
+                </div>
+                <div class="input-group">
+                    <label>ข้อความ 💕</label>
+                    <textarea id="noteMessage" placeholder="เขียนความรู้สึกของคุณ..." rows="4" required></textarea>
+                </div>
+                <div class="checkbox-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="noteAnonymous" checked>
+                        <span class="checkmark"></span>
+                        ส่งแบบไม่ระบุตัวตน 🎭
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-accent btn-glow">ส่งโน้ต 💌</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div id="editProfileModal" class="modal-overlay hidden">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>แก้ไขโปรไฟล์ ✏️</h3>
+                <button class="btn-icon modal-close" data-close="editProfileModal">&times;</button>
+            </div>
+            <form id="editProfileForm">
+                <div class="input-group">
+                    <label>ชื่อที่แสดง</label>
+                    <input type="text" id="editDisplayName" placeholder="ชื่อเล่น..." required>
+                </div>
+                <div class="input-group">
+                    <label>แนะนำตัว</label>
+                    <textarea id="editBio" placeholder="เขียนแนะนำตัวสั้นๆ..." rows="3"></textarea>
+                </div>
+                <div class="input-group">
+                    <label>โรงเรียน</label>
+                    <input type="text" id="editSchool" placeholder="ชื่อโรงเรียน...">
+                </div>
+                <div class="input-group">
+                    <label>ชั้นเรียน</label>
+                    <input type="text" id="editGrade" placeholder="เช่น ม.6/1">
+                </div>
+                <button type="submit" class="btn btn-primary">บันทึก ✨</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Upload Video Modal -->
+    <div id="uploadVideoModal" class="modal-overlay hidden">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>อัปโหลดวิดีโอ 🎬</h3>
+                <button class="btn-icon modal-close" data-close="uploadVideoModal">&times;</button>
+            </div>
+            <form id="uploadVideoForm">
+                <div class="input-group">
+                    <label>ชื่อวิดีโอ</label>
+                    <input type="text" id="videoTitle" placeholder="ตั้งชื่อวิดีโอ..." required>
+                </div>
+                <div class="upload-area" id="videoUploadArea">
+                    <input type="file" accept="video/*" id="videoFile" hidden>
+                    <div class="upload-placeholder">
+                        <svg viewBox="0 0 24 24" fill="none" width="48" height="48">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            <polyline points="17,8 12,3 7,8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <line x1="12" y1="3" x2="12" y2="15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                        <p>คลิกเพื่อเลือกวิดีโอ</p>
+                        <span class="upload-hint">MP4, WebM (ไม่เกิน 50MB)</span>
+                    </div>
+                </div>
+                <div id="videoPreviewArea" class="hidden">
+                    <video id="videoPreview" controls class="video-preview"></video>
+                </div>
+                <button type="submit" class="btn btn-primary">อัปโหลด 🚀</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/feed.js"></script>
+    <script src="js/chat.js"></script>
+    <script src="js/social.js"></script>
+    <script src="js/videos.js"></script>
+</body>
+</html>
